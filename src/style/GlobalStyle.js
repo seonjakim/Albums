@@ -39,8 +39,5 @@ const GlobalStyles = createGlobalStyle`
   textarea {
     resize: none;
   }
-  body {
-    background-color: #eee;
-  }
 `
 export default GlobalStyles

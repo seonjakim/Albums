@@ -1,12 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
+import ImageCard from './components/ImageCard'
 
 const App = () => {
-  return <StyledTest>hello</StyledTest>
+  return (
+    <div>
+      <ImageCard />
+    </div>
+  )
 }
 
 export default App
-
-const StyledTest = styled.div`
-  background-color: red;
-`
