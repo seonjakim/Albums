@@ -1,12 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const ImageCard = ({ title, imgUrl }) => {
+const ImageCard = ({ title, imgUrl, deleteBtnClick }) => {
   return (
     <StyledLi>
       <div>
         <h3>{title}</h3>
-        <button>&#8942;</button>
+        <button onClick={deleteBtnClick}>&#8942;</button>
       </div>
       <img src={imgUrl} />
     </StyledLi>

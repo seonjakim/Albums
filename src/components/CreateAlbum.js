@@ -12,6 +12,12 @@ const CreateAlbum = ({ modalOpen, uploadAlbum, newAlbumId }) => {
     Object.values(obj).some((value) => value.length === 0)
 
   React.useEffect(() => {
+    setNewAlbum({
+      ...newAlbum,
+      id: newAlbumId,
+    })
+  }, [newAlbumId])
+  React.useEffect(() => {
     if (!checkEmptyVal(newAlbum)) setHasEmptyVal(false)
     else setHasEmptyVal(true)
   }, [newAlbum])
@@ -20,6 +26,7 @@ const CreateAlbum = ({ modalOpen, uploadAlbum, newAlbumId }) => {
     event.preventDefault()
     const reader = new FileReader()
     const file = event.target.files[0]
+    console.log(file)
     reader.onloadend = () => {
       setNewAlbum({
         ...newAlbum,
@@ -32,7 +39,7 @@ const CreateAlbum = ({ modalOpen, uploadAlbum, newAlbumId }) => {
   const submitAlbum = (newAlbum) => {
     uploadAlbum(newAlbum)
     setNewAlbum({
-      id: '',
+      id: newAlbumId + 1,
       title: '',
       img: '',
     })

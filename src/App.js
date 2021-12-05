@@ -4,6 +4,7 @@ import ImageCard from './components/ImageCard'
 import Nav from './components/Nav'
 import Pagination from './components/Pagination'
 import CreateAlbum from './components/CreateAlbum'
+import DeleteAlbum from './components/DeleteAlbum'
 
 const App = () => {
   const [modalOpen, setModalOpen] = React.useState(false)
@@ -13,6 +14,21 @@ const App = () => {
   const lastAlbumIndex = currentPage * albumsPerPage
   const firstAlbumIndex = lastAlbumIndex - albumsPerPage
   const currentAlbums = albums.slice(firstAlbumIndex, lastAlbumIndex)
+  const [deleteModalOpen, setDeleteModalOpen] = React.useState(false)
+  const [deleteAlbumIndex, setDeleteAlbumIndex] = React.useState(null)
+
+  const deleteAlbumClick = (id) => {
+    setDeleteModalOpen(true)
+    setDeleteAlbumIndex(id)
+  }
+  const cancelDeletion = () => {
+    setDeleteModalOpen(false)
+    setDeleteAlbumIndex(null)
+  }
+  const confirmDeletion = () => {
+    setAlbums(albums.filter((album) => album.id !== deleteAlbumIndex))
+    cancelDeletion()
+  }
 
   const pageChangeScrollToTop = (pageNumber) => {
     setCurrentPage(pageNumber)
@@ -26,7 +42,6 @@ const App = () => {
     setAlbums([newAlbum, ...albums])
     setModalOpen(false)
   }
-  console.log(albums)
   React.useEffect(() => {
     const apiCall = async () => {
       const res = await fetch('https://jsonplaceholder.typicode.com/albums')
@@ -49,9 +64,13 @@ const App = () => {
             paddingTop: '80px',
           }}
         >
-          {currentAlbums.map((album) => (
-            <div style={{ margin: '1em 0' }} key={album.id}>
-              <ImageCard title={album.title} imgUrl={album.img} />
+          {currentAlbums.map((album, index) => (
+            <div style={{ margin: '1em 0' }} key={index}>
+              <ImageCard
+                deleteBtnClick={() => deleteAlbumClick(album.id)}
+                title={album.title}
+                imgUrl={album.img}
+              />
             </div>
           ))}
         </div>
@@ -63,10 +82,15 @@ const App = () => {
           />
         </div>
       </StyledAppContainer>
+      <DeleteAlbum
+        confirmDeletion={confirmDeletion}
+        cancelDeletion={cancelDeletion}
+        deleteModalOpen={deleteModalOpen}
+      />
       <CreateAlbum
         modalOpen={modalOpen}
         uploadAlbum={createAlbum}
-        newAlbumId={albums.length}
+        newAlbumId={albums.length + 1}
       />
     </>
   )
