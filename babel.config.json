@@ -3,5 +3,5 @@
   "plugins": [["babel-plugin-styled-components", {
     "minify": false,
     "transpileTemplateLiterals": false
-  }]]
+  }],"@babel/plugin-transform-runtime"]
 }

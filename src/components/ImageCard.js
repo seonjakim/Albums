@@ -32,7 +32,11 @@ const StyledLi = styled.li`
     font-size: 120%;
   }
   h3 {
+    width: 400px;
     padding: 0.5em 1em;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
   img {
     height: 400px;

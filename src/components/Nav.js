@@ -7,7 +7,6 @@ const Nav = ({ createBtnClick }) => {
       <div>
         <svg
           aria-label="Home"
-          class="_8-yf5 "
           color="#262626"
           fill="#262626"
           height="32"
@@ -34,8 +33,7 @@ const Nav = ({ createBtnClick }) => {
         </button>
         <img
           src="https://images.velog.io/images/seonja/post/01fd7f0f-2969-4dce-8c13-abe9d004ab52/image.png"
-          alt=""
-          srcset=""
+          alt="user-icon"
         />
       </div>
     </StyledNavContainer>
