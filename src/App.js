@@ -17,13 +17,25 @@ const App = () => {
   const [deleteModalOpen, setDeleteModalOpen] = React.useState(false)
   const [deleteAlbumIndex, setDeleteAlbumIndex] = React.useState(null)
 
-  const deleteAlbumClick = (id) => {
-    setDeleteModalOpen(true)
-    setDeleteAlbumIndex(id)
-  }
+  const [newAlbum, setNewAlbum] = React.useState({
+    id: albums.length,
+    title: '',
+    img: '',
+  })
+
   const cancelDeletion = () => {
     setDeleteModalOpen(false)
     setDeleteAlbumIndex(null)
+  }
+  const updateAlbum = () => {
+    setNewAlbum(albums.filter((album) => album.id === deleteAlbumIndex)[0])
+    cancelDeletion()
+    setModalOpen(true)
+  }
+
+  const deleteAlbumClick = (id) => {
+    setDeleteModalOpen(true)
+    setDeleteAlbumIndex(id)
   }
   const confirmDeletion = () => {
     setAlbums(albums.filter((album) => album.id !== deleteAlbumIndex))
@@ -39,7 +51,11 @@ const App = () => {
   }
 
   const createAlbum = (newAlbum) => {
-    setAlbums([newAlbum, ...albums])
+    let index = albums.findIndex((album) => album.id === newAlbum.id)
+    if (index !== -1) {
+      albums[index] = newAlbum
+      setAlbums(albums)
+    } else setAlbums([newAlbum, ...albums])
     setModalOpen(false)
   }
   React.useEffect(() => {
@@ -66,6 +82,7 @@ const App = () => {
         >
           {currentAlbums.map((album, index) => (
             <div style={{ margin: '1em 0' }} key={index}>
+              <div>{album.id}</div>
               <ImageCard
                 deleteBtnClick={() => deleteAlbumClick(album.id)}
                 title={album.title}
@@ -86,8 +103,11 @@ const App = () => {
         confirmDeletion={confirmDeletion}
         cancelDeletion={cancelDeletion}
         deleteModalOpen={deleteModalOpen}
+        updateAlbum={updateAlbum}
       />
       <CreateAlbum
+        newAlbum={newAlbum}
+        setNewAlbum={setNewAlbum}
         modalOpen={modalOpen}
         uploadAlbum={createAlbum}
         newAlbumId={albums.length + 1}

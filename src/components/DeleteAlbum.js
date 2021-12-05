@@ -1,12 +1,18 @@
 import React from 'react'
 import styled from 'styled-components'
-const DeleteAlbum = ({ deleteModalOpen, cancelDeletion, confirmDeletion }) => {
+const DeleteAlbum = ({
+  deleteModalOpen,
+  cancelDeletion,
+  confirmDeletion,
+  updateAlbum,
+}) => {
   return (
     <>
       {deleteModalOpen && (
         <StyledModal>
           <div>
             <span>Would you like to delete this Album?</span>
+            <button onClick={updateAlbum}>Edit</button>
             <button onClick={confirmDeletion}>Delete</button>
             <button onClick={cancelDeletion}>Cancel</button>
           </div>
@@ -44,7 +50,7 @@ const StyledModal = styled.div`
     padding: 1em;
     border-top: ${({ theme }) => theme.border.main};
     background-color: transparent;
-    &:nth-child(2) {
+    &:nth-child(3) {
       color: red;
       font-weight: 700;
     }

@@ -1,13 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const CreateAlbum = ({ modalOpen, uploadAlbum, newAlbumId }) => {
+const CreateAlbum = ({
+  newAlbum,
+  setNewAlbum,
+  modalOpen,
+  uploadAlbum,
+  newAlbumId,
+}) => {
   const [hasEmptyVal, setHasEmptyVal] = React.useState(true)
-  const [newAlbum, setNewAlbum] = React.useState({
-    id: newAlbumId,
-    title: '',
-    img: '',
-  })
   const checkEmptyVal = (obj) =>
     Object.values(obj).some((value) => value.length === 0)
 
@@ -66,8 +67,9 @@ const CreateAlbum = ({ modalOpen, uploadAlbum, newAlbumId }) => {
               disabled={hasEmptyVal}
               onClick={() => submitAlbum(newAlbum)}
             >
-              create album
+              Done
             </StyledButton>
+            <button>cancel</button>
           </div>
         </StyledModal>
       )}
