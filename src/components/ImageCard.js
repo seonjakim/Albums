@@ -8,7 +8,7 @@ const ImageCard = ({ title, imgUrl }) => {
         <h3>{title}</h3>
         <button>&#8942;</button>
       </div>
-      <img src="https://via.placeholder.com/450x400" />
+      <img src={imgUrl} />
     </StyledLi>
   )
 }
@@ -39,7 +39,6 @@ const StyledLi = styled.li`
     text-overflow: ellipsis;
   }
   img {
-    height: 400px;
     width: 450px;
   }
 `

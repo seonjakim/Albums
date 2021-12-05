@@ -8,6 +8,9 @@ const theme = {
   border: {
     main: '1px solid #dbdbdb',
   },
+  button: {
+    color: '#0095f6',
+  },
 }
 
 ReactDOM.render(

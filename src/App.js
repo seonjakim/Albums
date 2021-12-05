@@ -3,8 +3,10 @@ import styled from 'styled-components'
 import ImageCard from './components/ImageCard'
 import Nav from './components/Nav'
 import Pagination from './components/Pagination'
+import CreateAlbum from './components/CreateAlbum'
 
 const App = () => {
+  const [modalOpen, setModalOpen] = React.useState(false)
   const [albums, setAlbums] = React.useState([])
   const albumsPerPage = 5
   const [currentPage, setCurrentPage] = React.useState(1)
@@ -20,17 +22,26 @@ const App = () => {
     })
   }
 
+  const createAlbum = (newAlbum) => {
+    setAlbums([newAlbum, ...albums])
+    setModalOpen(false)
+  }
+  console.log(albums)
   React.useEffect(() => {
     const apiCall = async () => {
       const res = await fetch('https://jsonplaceholder.typicode.com/albums')
       const data = await res.json()
-      setAlbums(data)
+      setAlbums(
+        data.map((album) => {
+          return { ...album, img: 'https://via.placeholder.com/450x400' }
+        })
+      )
     }
     apiCall()
   }, [])
   return (
     <>
-      <Nav />
+      <Nav createBtnClick={() => setModalOpen(true)} />
       <StyledAppContainer>
         <div
           style={{
@@ -40,7 +51,7 @@ const App = () => {
         >
           {currentAlbums.map((album) => (
             <div style={{ margin: '1em 0' }} key={album.id}>
-              <ImageCard title={album.title} />
+              <ImageCard title={album.title} imgUrl={album.img} />
             </div>
           ))}
         </div>
@@ -52,6 +63,11 @@ const App = () => {
           />
         </div>
       </StyledAppContainer>
+      <CreateAlbum
+        modalOpen={modalOpen}
+        uploadAlbum={createAlbum}
+        newAlbumId={albums.length}
+      />
     </>
   )
 }
