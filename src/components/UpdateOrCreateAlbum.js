@@ -1,23 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const CreateAlbum = ({
-  newAlbum,
-  setNewAlbum,
-  modalOpen,
-  uploadAlbum,
-  newAlbumId,
-}) => {
+const CreateAlbum = ({ newAlbum, setNewAlbum, doneBtnClick }) => {
   const [hasEmptyVal, setHasEmptyVal] = React.useState(true)
   const checkEmptyVal = (obj) =>
     Object.values(obj).some((value) => value.length === 0)
 
-  React.useEffect(() => {
-    setNewAlbum({
-      ...newAlbum,
-      id: newAlbumId,
-    })
-  }, [newAlbumId])
   React.useEffect(() => {
     if (!checkEmptyVal(newAlbum)) setHasEmptyVal(false)
     else setHasEmptyVal(true)
@@ -37,43 +25,28 @@ const CreateAlbum = ({
     reader.readAsDataURL(file)
   }
 
-  const submitAlbum = (newAlbum) => {
-    uploadAlbum(newAlbum)
-    setNewAlbum({
-      id: newAlbumId + 1,
-      title: '',
-      img: '',
-    })
-  }
   return (
-    <>
-      {modalOpen && (
-        <StyledModal>
-          <div>
-            <input
-              value={newAlbum.title}
-              type="text"
-              placeholder="title"
-              onChange={(event) =>
-                setNewAlbum({ ...newAlbum, title: event.target.value })
-              }
-            />
-            <input
-              type="file"
-              accept="image/jpg,impge/png,image/jpeg,image/gif"
-              onChange={uploadFileToUrl}
-            />
-            <StyledButton
-              disabled={hasEmptyVal}
-              onClick={() => submitAlbum(newAlbum)}
-            >
-              Done
-            </StyledButton>
-            <button>cancel</button>
-          </div>
-        </StyledModal>
-      )}
-    </>
+    <StyledModal>
+      <div>
+        <input
+          value={newAlbum.title}
+          type="text"
+          placeholder="title"
+          onChange={(event) =>
+            setNewAlbum({ ...newAlbum, title: event.target.value })
+          }
+        />
+        <input
+          type="file"
+          accept="image/jpg,impge/png,image/jpeg,image/gif"
+          onChange={uploadFileToUrl}
+        />
+        <StyledButton disabled={hasEmptyVal} onClick={doneBtnClick}>
+          Done
+        </StyledButton>
+        <button>cancel</button>
+      </div>
+    </StyledModal>
   )
 }
 

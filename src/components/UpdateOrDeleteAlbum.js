@@ -1,24 +1,19 @@
 import React from 'react'
 import styled from 'styled-components'
 const DeleteAlbum = ({
-  deleteModalOpen,
-  cancelDeletion,
-  confirmDeletion,
-  updateAlbum,
+  resetUpdateOrDeleteStatus,
+  deleteBtnClick,
+  editBtnClick,
 }) => {
   return (
-    <>
-      {deleteModalOpen && (
-        <StyledModal>
-          <div>
-            <span>Would you like to delete this Album?</span>
-            <button onClick={updateAlbum}>Edit</button>
-            <button onClick={confirmDeletion}>Delete</button>
-            <button onClick={cancelDeletion}>Cancel</button>
-          </div>
-        </StyledModal>
-      )}
-    </>
+    <StyledModal>
+      <div>
+        <span>Would you like to delete this Album?</span>
+        <button onClick={editBtnClick}>Edit</button>
+        <button onClick={deleteBtnClick}>Delete</button>
+        <button onClick={resetUpdateOrDeleteStatus}>Cancel</button>
+      </div>
+    </StyledModal>
   )
 }
 
