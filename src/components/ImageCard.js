@@ -16,11 +16,12 @@ const ImageCard = ({ title, imgUrl }) => {
 export default ImageCard
 
 const StyledLi = styled.li`
-  border: 1px solid #eee;
+  border: ${({ theme }) => theme.border.main};
   width: fit-content;
   div {
-    border-bottom: 1px solid #eee;
+    border-bottom: ${({ theme }) => theme.border.main};
     display: flex;
+    background-color: #fff;
   }
   button {
     display: block;

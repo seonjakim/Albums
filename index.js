@@ -4,7 +4,11 @@ import { ThemeProvider } from 'styled-components'
 import App from './src/App'
 import GlobalStyles from './src/style/GlobalStyle'
 
-const theme = {}
+const theme = {
+  border: {
+    main: '1px solid #dbdbdb',
+  },
+}
 
 ReactDOM.render(
   <ThemeProvider theme={theme}>
