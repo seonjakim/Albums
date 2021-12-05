@@ -5,6 +5,7 @@ import Nav from './components/Nav'
 import Pagination from './components/Pagination'
 import CreateAlbum from './components/UpdateOrCreateAlbum'
 import DeleteAlbum from './components/UpdateOrDeleteAlbum'
+import * as crudAction from './components/Library'
 
 const App = () => {
   const albumsPerPage = 5
@@ -14,44 +15,29 @@ const App = () => {
   const [updateOrDeleteModalOpen, setUpdateOrDeleteModalOpen] = React.useState(
     false
   )
-
-  const [albums, setAlbums] = React.useState([])
+  const [albums, setAlbums] = React.useReducer(crudAction.reducer, [])
   const [currentPage, setCurrentPage] = React.useState(1)
   const lastAlbumIndex = currentPage * albumsPerPage
   const firstAlbumIndex = lastAlbumIndex - albumsPerPage
   const currentAlbums = albums.slice(firstAlbumIndex, lastAlbumIndex)
   const [selectedAlbumId, setSelectedAlbumId] = React.useState(null)
+  const [newAlbumIndex, setNewAlbumIndex] = React.useState(0)
   const albumInfo = {
-    id: albums.length + 1,
+    id: newAlbumIndex,
     title: '',
     img: '',
   }
 
   const [newAlbum, setNewAlbum] = React.useState(albumInfo)
-  const albumsWithoutSelectedAlbum = (albums, selectedId) =>
-    albums.filter((album) => album.id !== selectedId)
-
-  const reducer = (state, action) => {
-    switch (action.type) {
-      case 'UPDATE':
-        state[action.index] = action.albumInfo
-        return state
-      case 'CREATE':
-        return [action.payload, ...state]
-      case 'DELETE':
-        return albumsWithoutSelectedAlbum(state, action.payload)
-    }
-  }
-
-  const indexOfSelectedAlbum = (albums, selectedId) =>
-    albums.findIndex((album) => album.id === selectedId)
 
   const resetUpdateOrDeleteStatus = () => {
     setUpdateOrDeleteModalOpen(false)
     setSelectedAlbumId(null)
   }
   const editBtnClick = () => {
-    setNewAlbum(albums[indexOfSelectedAlbum(albums, selectedAlbumId)])
+    setNewAlbum(
+      albums[crudAction.indexOfSelectedAlbum(albums, selectedAlbumId)]
+    )
     resetUpdateOrDeleteStatus()
     setUpdateOrCreateModalOpen(true)
   }
@@ -61,7 +47,7 @@ const App = () => {
     setSelectedAlbumId(id)
   }
   const deleteBtnClick = () => {
-    setAlbums(albumsWithoutSelectedAlbum(albums, selectedAlbumId))
+    setAlbums({ type: 'DELETE', index: selectedAlbumId })
     resetUpdateOrDeleteStatus()
   }
 
@@ -74,12 +60,16 @@ const App = () => {
   }
 
   const doneBtnClick = () => {
-    let index = indexOfSelectedAlbum(albums, newAlbum.id)
+    let index = crudAction.indexOfSelectedAlbum(albums, newAlbum.id)
     if (index !== -1) {
-      albums[index] = newAlbum
-      setAlbums(albums)
-    } else setAlbums([newAlbum, ...albums])
+      setAlbums({
+        type: 'UPDATE',
+        albumInfo: newAlbum,
+        index,
+      })
+    } else setAlbums({ type: 'CREATE', albumInfo: newAlbum })
     setUpdateOrCreateModalOpen(false)
+    setNewAlbumIndex((state) => state + 1)
     setNewAlbum(albumInfo)
   }
 
@@ -92,7 +82,7 @@ const App = () => {
           return { ...album, img: 'https://via.placeholder.com/450x400' }
         })
       )
-      albumInfo.id = data.length + 1
+      setNewAlbumIndex(data.length + 1)
     }
     apiCall()
   }, [])
