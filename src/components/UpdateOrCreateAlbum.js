@@ -1,7 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const CreateAlbum = ({ newAlbum, setNewAlbum, doneBtnClick }) => {
+const CreateAlbum = ({
+  newAlbum,
+  setNewAlbum,
+  doneBtnClick,
+  cancelBtnClick,
+}) => {
   const [hasEmptyVal, setHasEmptyVal] = React.useState(true)
   const checkEmptyVal = (obj) =>
     Object.values(obj).some((value) => value.length === 0)
@@ -44,7 +49,7 @@ const CreateAlbum = ({ newAlbum, setNewAlbum, doneBtnClick }) => {
         <StyledButton disabled={hasEmptyVal} onClick={doneBtnClick}>
           Done
         </StyledButton>
-        <button>cancel</button>
+        <button onClick={cancelBtnClick}>cancel</button>
       </div>
     </StyledModal>
   )

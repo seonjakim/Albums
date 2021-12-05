@@ -8,7 +8,6 @@ const DeleteAlbum = ({
   return (
     <StyledModal>
       <div>
-        <span>Would you like to delete this Album?</span>
         <button onClick={editBtnClick}>Edit</button>
         <button onClick={deleteBtnClick}>Delete</button>
         <button onClick={resetUpdateOrDeleteStatus}>Cancel</button>
@@ -34,18 +33,12 @@ const StyledModal = styled.div`
     background-color: #fff;
     border-radius: 4px;
   }
-  span {
-    display: inline-block;
-    font-size: 120%;
-    font-weight: 700;
-    padding: 1em;
-  }
   button {
     width: 100%;
     padding: 1em;
     border-top: ${({ theme }) => theme.border.main};
     background-color: transparent;
-    &:nth-child(3) {
+    &:nth-child(2) {
       color: red;
       font-weight: 700;
     }

@@ -5,6 +5,7 @@ import Nav from './components/Nav'
 import Pagination from './components/Pagination'
 import CreateAlbum from './components/UpdateOrCreateAlbum'
 import DeleteAlbum from './components/UpdateOrDeleteAlbum'
+import DiscardMessage from './components/DiscardMessageModal'
 import * as crudAction from './components/Library'
 
 const App = () => {
@@ -15,6 +16,7 @@ const App = () => {
   const [updateOrDeleteModalOpen, setUpdateOrDeleteModalOpen] = React.useState(
     false
   )
+  const [discardModalOpen, setDiscardModalOpen] = React.useState(false)
   const [albums, setAlbums] = React.useReducer(crudAction.reducer, [])
   const [currentPage, setCurrentPage] = React.useState(1)
   const lastAlbumIndex = currentPage * albumsPerPage
@@ -33,6 +35,12 @@ const App = () => {
   const resetUpdateOrDeleteStatus = () => {
     setUpdateOrDeleteModalOpen(false)
     setSelectedAlbumId(null)
+  }
+  const discardBtnClick = () => {
+    setUpdateOrCreateModalOpen(false)
+    setDiscardModalOpen(false)
+    resetUpdateOrDeleteStatus()
+    setNewAlbum(albumInfo)
   }
   const editBtnClick = () => {
     setNewAlbum(
@@ -121,6 +129,13 @@ const App = () => {
           newAlbum={newAlbum}
           setNewAlbum={setNewAlbum}
           doneBtnClick={doneBtnClick}
+          cancelBtnClick={() => setDiscardModalOpen(true)}
+        />
+      )}
+      {discardModalOpen && (
+        <DiscardMessage
+          discardBtnClick={discardBtnClick}
+          cancelBtnClick={() => setDiscardModalOpen(false)}
         />
       )}
     </>
