@@ -4,28 +4,26 @@ import ModalBackground from './ModalBackground'
 
 const AlbumWindow = ({ modalBackgroundClick, currentAlbum }) => {
   return (
-    <>
-      <ModalBackground modalBackgroundClick={modalBackgroundClick} />
+    <ModalBackground modalBackgroundClick={modalBackgroundClick}>
       <StyledAlbumWindow>
         <h2>{currentAlbum?.title}</h2>
         <img src={currentAlbum?.img} alt="album-photo" />
       </StyledAlbumWindow>
-    </>
+    </ModalBackground>
   )
 }
 
 export default AlbumWindow
 
 const StyledAlbumWindow = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  max-width: 80vw;
-  transform: translate(-50%, -50%);
-  background-color: #fff;
-  border-radius: 4px;
+  max-width: 40vw;
   padding: 2em;
   h2 {
+    width: 100%;
     margin-bottom: 8px;
+    overflow-wrap: break-word;
+  }
+  img {
+    width: 100%;
   }
 `

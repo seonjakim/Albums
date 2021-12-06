@@ -42,7 +42,7 @@ const Nav = ({ createBtnClick }) => {
 
 export default Nav
 
-const StyledNavContainer = styled.div`
+const StyledNavContainer = styled.nav`
   position: fixed;
   width: 100%;
   border-bottom: ${({ theme }) => theme.border.main};

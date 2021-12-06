@@ -32,8 +32,7 @@ const CreateAlbum = ({
   }
 
   return (
-    <>
-      <ModalBackground modalBackgroundClick={cancelBtnClick} />
+    <ModalBackground modalBackgroundClick={cancelBtnClick}>
       <StyledPostAlbumContainer>
         <input
           value={currentAlbum.title}
@@ -63,20 +62,14 @@ const CreateAlbum = ({
           </StyledButton>
         </div>
       </StyledPostAlbumContainer>
-    </>
+    </ModalBackground>
   )
 }
 
 export default CreateAlbum
 
 const StyledPostAlbumContainer = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   padding: 2em;
-  background-color: #fff;
-  border-radius: 4px;
   display: grid;
   grid-template-rows: repeat(4, auto);
   grid-template-columns: 1fr;

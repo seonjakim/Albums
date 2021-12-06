@@ -3,18 +3,18 @@ import styled from 'styled-components'
 import ImageCard from './components/ImageCard'
 import Nav from './components/Nav'
 import Pagination from './components/Pagination'
-import CreateAlbum from './components/UpdateOrCreateAlbum'
-import DeleteAlbum from './components/UpdateOrDeleteAlbum'
-import DiscardMessage from './components/DiscardMessageModal'
-import AlbumWindow from './components/AlbumWindow'
+import PostAlbumModal from './components/modals/UpdateOrCreateAlbum'
+import EditButtonModal from './components/modals/UpdateOrDeleteAlbum'
+import DiscardMessageModal from './components/modals/DiscardMessageModal'
+import AlbumWindowModal from './components/modals/AlbumWindow'
 import * as crudAction from './components/Library'
 
 const App = () => {
+  const scrollRef = React.useRef()
   /** Modal open status */
-  const [updateOrCreateModalOpen, setUpdateOrCreateModalOpen] = React.useState(
-    false
-  )
-  const [editDeleteModalOpen, setEditDeleteModalOpen] = React.useState(false)
+  const [modalOpen, setModalOpen] = React.useState(false)
+  const [postModalOpen, setPostModalOpen] = React.useState(false)
+  const [editBtnModalOpen, setEditBtnModalOpen] = React.useState(false)
   const [discardModalOpen, setDiscardModalOpen] = React.useState(false)
   const [albumModalOpen, setAlbumModalOpen] = React.useState(false)
   const [albums, setAlbums] = React.useReducer(crudAction.reducer, [])
@@ -35,11 +35,11 @@ const App = () => {
   const [currentAlbum, setCurrentAlbum] = React.useState(albumInfo)
 
   const resetUpdateOrDeleteStatus = () => {
-    setEditDeleteModalOpen(false)
+    setEditBtnModalOpen(false)
     setSelectedAlbumId(null)
   }
   const discardBtnClick = () => {
-    setUpdateOrCreateModalOpen(false)
+    setPostModalOpen(false)
     setDiscardModalOpen(false)
     resetUpdateOrDeleteStatus()
     setCurrentAlbum(albumInfo)
@@ -49,11 +49,11 @@ const App = () => {
       albums[crudAction.indexOfSelectedAlbum(albums, selectedAlbumId)]
     )
     resetUpdateOrDeleteStatus()
-    setUpdateOrCreateModalOpen(true)
+    setPostModalOpen(true)
   }
 
   const verticalEllipsisClick = (id) => {
-    setEditDeleteModalOpen(true)
+    setEditBtnModalOpen(true)
     setSelectedAlbumId(id)
   }
   const deleteBtnClick = () => {
@@ -63,7 +63,7 @@ const App = () => {
 
   const pageChangeScrollToTop = (pageNumber) => {
     setCurrentPage(pageNumber)
-    window.scrollTo({
+    scrollRef.current.scrollTo({
       top: 0,
       behavior: 'smooth',
     })
@@ -86,7 +86,7 @@ const App = () => {
     } else setAlbums({ type: 'CREATE', albumInfo: currentAlbum })
     setNewAlbumId((state) => state + 1)
     //discardBtnClick으로 합칠 수 있음
-    setUpdateOrCreateModalOpen(false)
+    setPostModalOpen(false)
     setCurrentAlbum(albumInfo)
   }
 
@@ -114,43 +114,44 @@ const App = () => {
   }, [])
   return (
     <>
-      <Nav createBtnClick={() => setUpdateOrCreateModalOpen(true)} />
+      <Nav createBtnClick={() => setPostModalOpen(true)} />
       <StyledAppContainer>
-        {currentAlbums.map((album, index) => (
-          <div style={{ margin: '1em auto' }} key={index}>
-            <div>{album.id}</div>
-            <ImageCard
-              verticalEllipsisClick={() => verticalEllipsisClick(album.id)}
-              onImgClick={() => onAlbumCardClick(album.id)}
-              title={album.title}
-              imgUrl={album.img}
-            />
-          </div>
-        ))}
-
-        <div>
-          <Pagination
-            albumsPerPage={albumsPerPage}
-            totalAlbums={albums.length}
-            setCurrentPage={pageChangeScrollToTop}
-          />
+        <div ref={scrollRef} style={{ overflowY: 'scroll' }}>
+          {currentAlbums.map((album, index) => (
+            <div
+              style={{ width: 'fit-content', margin: '1em auto' }}
+              key={index}
+            >
+              <ImageCard
+                verticalEllipsisClick={() => verticalEllipsisClick(album.id)}
+                onImgClick={() => onAlbumCardClick(album.id)}
+                title={album.title}
+                imgUrl={album.img}
+              />
+            </div>
+          ))}
         </div>
+        <Pagination
+          albumsPerPage={albumsPerPage}
+          totalAlbums={albums.length}
+          setCurrentPage={pageChangeScrollToTop}
+        />
       </StyledAppContainer>
       {albumModalOpen && (
-        <AlbumWindow
+        <AlbumWindowModal
           modalBackgroundClick={onAlbumCardClose}
           currentAlbum={currentAlbum}
         />
       )}
-      {editDeleteModalOpen && (
-        <DeleteAlbum
+      {editBtnModalOpen && (
+        <EditButtonModal
           deleteBtnClick={deleteBtnClick}
-          resetUpdateOrDeleteStatus={resetUpdateOrDeleteStatus}
+          cancelBtnClick={resetUpdateOrDeleteStatus}
           editBtnClick={editBtnClick}
         />
       )}
-      {updateOrCreateModalOpen && (
-        <CreateAlbum
+      {postModalOpen && (
+        <PostAlbumModal
           currentAlbum={currentAlbum}
           setCurrentAlbum={setCurrentAlbum}
           doneBtnClick={doneBtnClick}
@@ -158,7 +159,7 @@ const App = () => {
         />
       )}
       {discardModalOpen && (
-        <DiscardMessage
+        <DiscardMessageModal
           discardBtnClick={discardBtnClick}
           cancelBtnClick={() => setDiscardModalOpen(false)}
         />
@@ -171,6 +172,7 @@ export default App
 
 const StyledAppContainer = styled.div`
   display: grid;
-  grid-template-rows: 1fr auto;
+  grid-template-rows: auto 1fr auto;
+  height: 100vh;
   padding-top: 80px;
 `
