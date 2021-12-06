@@ -6,44 +6,46 @@ import Pagination from './components/Pagination'
 import CreateAlbum from './components/UpdateOrCreateAlbum'
 import DeleteAlbum from './components/UpdateOrDeleteAlbum'
 import DiscardMessage from './components/DiscardMessageModal'
+import AlbumWindow from './components/AlbumWindow'
 import * as crudAction from './components/Library'
 
 const App = () => {
-  const albumsPerPage = 5
+  /** Modal open status */
   const [updateOrCreateModalOpen, setUpdateOrCreateModalOpen] = React.useState(
     false
   )
-  const [updateOrDeleteModalOpen, setUpdateOrDeleteModalOpen] = React.useState(
-    false
-  )
+  const [editDeleteModalOpen, setEditDeleteModalOpen] = React.useState(false)
   const [discardModalOpen, setDiscardModalOpen] = React.useState(false)
+  const [albumModalOpen, setAlbumModalOpen] = React.useState(false)
   const [albums, setAlbums] = React.useReducer(crudAction.reducer, [])
+  /** pagination */
   const [currentPage, setCurrentPage] = React.useState(1)
+  const albumsPerPage = 5
   const lastAlbumIndex = currentPage * albumsPerPage
   const firstAlbumIndex = lastAlbumIndex - albumsPerPage
   const currentAlbums = albums.slice(firstAlbumIndex, lastAlbumIndex)
-  const [selectedAlbumId, setSelectedAlbumId] = React.useState(null)
-  const [newAlbumIndex, setNewAlbumIndex] = React.useState(0)
+  /** currently selected album info for Edit, Delete, and Read */
+  const [newAlbumId, setNewAlbumId] = React.useState(0)
   const albumInfo = {
-    id: newAlbumIndex,
+    id: newAlbumId,
     title: '',
     img: '',
   }
-
-  const [newAlbum, setNewAlbum] = React.useState(albumInfo)
+  const [selectedAlbumId, setSelectedAlbumId] = React.useState(null)
+  const [currentAlbum, setCurrentAlbum] = React.useState(albumInfo)
 
   const resetUpdateOrDeleteStatus = () => {
-    setUpdateOrDeleteModalOpen(false)
+    setEditDeleteModalOpen(false)
     setSelectedAlbumId(null)
   }
   const discardBtnClick = () => {
     setUpdateOrCreateModalOpen(false)
     setDiscardModalOpen(false)
     resetUpdateOrDeleteStatus()
-    setNewAlbum(albumInfo)
+    setCurrentAlbum(albumInfo)
   }
   const editBtnClick = () => {
-    setNewAlbum(
+    setCurrentAlbum(
       albums[crudAction.indexOfSelectedAlbum(albums, selectedAlbumId)]
     )
     resetUpdateOrDeleteStatus()
@@ -51,7 +53,7 @@ const App = () => {
   }
 
   const verticalEllipsisClick = (id) => {
-    setUpdateOrDeleteModalOpen(true)
+    setEditDeleteModalOpen(true)
     setSelectedAlbumId(id)
   }
   const deleteBtnClick = () => {
@@ -67,18 +69,34 @@ const App = () => {
     })
   }
 
+  const cancelBtnClick = () => {
+    if (currentAlbum.title.length || currentAlbum.img.length)
+      setDiscardModalOpen(true)
+    else discardBtnClick()
+  }
+
   const doneBtnClick = () => {
-    let index = crudAction.indexOfSelectedAlbum(albums, newAlbum.id)
+    let index = crudAction.indexOfSelectedAlbum(albums, currentAlbum.id)
     if (index !== -1) {
       setAlbums({
         type: 'UPDATE',
-        albumInfo: newAlbum,
+        albumInfo: currentAlbum,
         index,
       })
-    } else setAlbums({ type: 'CREATE', albumInfo: newAlbum })
+    } else setAlbums({ type: 'CREATE', albumInfo: currentAlbum })
+    setNewAlbumId((state) => state + 1)
+    //discardBtnClick으로 합칠 수 있음
     setUpdateOrCreateModalOpen(false)
-    setNewAlbumIndex((state) => state + 1)
-    setNewAlbum(albumInfo)
+    setCurrentAlbum(albumInfo)
+  }
+
+  const onAlbumCardClick = (id) => {
+    setAlbumModalOpen(true)
+    setCurrentAlbum(albums[crudAction.indexOfSelectedAlbum(albums, id)])
+  }
+  const onAlbumCardClose = () => {
+    setAlbumModalOpen(false)
+    setCurrentAlbum(albumInfo)
   }
 
   React.useEffect(() => {
@@ -90,7 +108,7 @@ const App = () => {
           return { ...album, img: 'https://via.placeholder.com/450x400' }
         })
       )
-      setNewAlbumIndex(data.length + 1)
+      setNewAlbumId(data.length + 1)
     }
     apiCall()
   }, [])
@@ -103,6 +121,7 @@ const App = () => {
             <div>{album.id}</div>
             <ImageCard
               verticalEllipsisClick={() => verticalEllipsisClick(album.id)}
+              onImgClick={() => onAlbumCardClick(album.id)}
               title={album.title}
               imgUrl={album.img}
             />
@@ -117,7 +136,13 @@ const App = () => {
           />
         </div>
       </StyledAppContainer>
-      {updateOrDeleteModalOpen && (
+      {albumModalOpen && (
+        <AlbumWindow
+          modalBackgroundClick={onAlbumCardClose}
+          currentAlbum={currentAlbum}
+        />
+      )}
+      {editDeleteModalOpen && (
         <DeleteAlbum
           deleteBtnClick={deleteBtnClick}
           resetUpdateOrDeleteStatus={resetUpdateOrDeleteStatus}
@@ -126,11 +151,10 @@ const App = () => {
       )}
       {updateOrCreateModalOpen && (
         <CreateAlbum
-          newAlbum={newAlbum}
-          setNewAlbum={setNewAlbum}
+          currentAlbum={currentAlbum}
+          setCurrentAlbum={setCurrentAlbum}
           doneBtnClick={doneBtnClick}
-          // 이 부분에 값 입력 없으면 discard 메세지 안뜨게
-          cancelBtnClick={() => setDiscardModalOpen(true)}
+          cancelBtnClick={cancelBtnClick}
         />
       )}
       {discardModalOpen && (

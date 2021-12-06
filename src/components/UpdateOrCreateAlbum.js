@@ -3,8 +3,8 @@ import styled from 'styled-components'
 import ModalBackground from './ModalBackground'
 
 const CreateAlbum = ({
-  newAlbum,
-  setNewAlbum,
+  currentAlbum,
+  setCurrentAlbum,
   doneBtnClick,
   cancelBtnClick,
 }) => {
@@ -13,9 +13,9 @@ const CreateAlbum = ({
     Object.values(obj).some((value) => value.length === 0)
 
   React.useEffect(() => {
-    if (!checkEmptyVal(newAlbum)) setHasEmptyVal(false)
+    if (!checkEmptyVal(currentAlbum)) setHasEmptyVal(false)
     else setHasEmptyVal(true)
-  }, [newAlbum])
+  }, [currentAlbum])
 
   const uploadFileToUrl = (event) => {
     event.preventDefault()
@@ -23,8 +23,8 @@ const CreateAlbum = ({
     const file = event.target.files[0]
     console.log(file)
     reader.onloadend = () => {
-      setNewAlbum({
-        ...newAlbum,
+      setCurrentAlbum({
+        ...currentAlbum,
         img: reader.result,
       })
     }
@@ -36,11 +36,11 @@ const CreateAlbum = ({
       <ModalBackground modalBackgroundClick={cancelBtnClick} />
       <StyledPostAlbumContainer>
         <input
-          value={newAlbum.title}
+          value={currentAlbum.title}
           type="text"
           placeholder="title"
           onChange={(event) =>
-            setNewAlbum({ ...newAlbum, title: event.target.value })
+            setCurrentAlbum({ ...currentAlbum, title: event.target.value })
           }
         />
         <input
@@ -50,8 +50,8 @@ const CreateAlbum = ({
         />
         <img
           src={
-            newAlbum.img.length
-              ? newAlbum.img
+            currentAlbum.img.length
+              ? currentAlbum.img
               : 'https://edgepharm.com/wp-content/uploads/2020/01/image-placeholder.jpg'
           }
           alt="album-photo"
@@ -68,14 +68,6 @@ const CreateAlbum = ({
 }
 
 export default CreateAlbum
-
-const StyledModal = styled.div`
-  position: fixed;
-  height: 100vh;
-  width: 100%;
-  top: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-`
 
 const StyledPostAlbumContainer = styled.div`
   position: absolute;
