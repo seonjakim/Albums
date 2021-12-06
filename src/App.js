@@ -129,6 +129,7 @@ const App = () => {
           newAlbum={newAlbum}
           setNewAlbum={setNewAlbum}
           doneBtnClick={doneBtnClick}
+          // 이 부분에 값 입력 없으면 discard 메세지 안뜨게
           cancelBtnClick={() => setDiscardModalOpen(true)}
         />
       )}

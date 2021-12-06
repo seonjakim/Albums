@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import ModalBackground from './ModalBackground'
 
 const CreateAlbum = ({
   newAlbum,
@@ -31,8 +32,9 @@ const CreateAlbum = ({
   }
 
   return (
-    <StyledModal>
-      <div>
+    <>
+      <ModalBackground modalBackgroundClick={cancelBtnClick} />
+      <StyledPostAlbumContainer>
         <input
           value={newAlbum.title}
           type="text"
@@ -46,12 +48,22 @@ const CreateAlbum = ({
           accept="image/jpg,impge/png,image/jpeg,image/gif"
           onChange={uploadFileToUrl}
         />
-        <StyledButton disabled={hasEmptyVal} onClick={doneBtnClick}>
-          Done
-        </StyledButton>
-        <button onClick={cancelBtnClick}>cancel</button>
-      </div>
-    </StyledModal>
+        <img
+          src={
+            newAlbum.img.length
+              ? newAlbum.img
+              : 'https://edgepharm.com/wp-content/uploads/2020/01/image-placeholder.jpg'
+          }
+          alt="album-photo"
+        />
+        <div>
+          <button onClick={cancelBtnClick}>cancel</button>
+          <StyledButton disabled={hasEmptyVal} onClick={doneBtnClick}>
+            Done
+          </StyledButton>
+        </div>
+      </StyledPostAlbumContainer>
+    </>
   )
 }
 
@@ -63,23 +75,39 @@ const StyledModal = styled.div`
   width: 100%;
   top: 0;
   background-color: rgba(0, 0, 0, 0.5);
+`
 
-  div {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 50vw;
-    min-width: 300px;
-    padding: 2em;
-    background-color: #fff;
+const StyledPostAlbumContainer = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 2em;
+  background-color: #fff;
+  border-radius: 4px;
+  display: grid;
+  grid-template-rows: repeat(4, auto);
+  grid-template-columns: 1fr;
+  gap: 8px;
+  input[type='text'] {
+    padding: 0.5em 1em;
+  }
+  img {
+    width: 450px;
+  }
+  button {
+    padding: 0.5em 1em;
     border-radius: 4px;
+    margin-right: 8px;
+    &:first-child {
+      background-color: transparent;
+      border: ${({ theme }) => theme.border.main};
+    }
   }
 `
 const StyledButton = styled.button`
   background-color: ${({ theme, disabled }) =>
     disabled ? '#ccc' : theme.button.color};
-  padding: 0.5em 1em;
-  border-radius: 4px;
   color: ${({ disabled }) => (disabled ? '#666' : '#fff')};
+  font-weight: 700;
 `
