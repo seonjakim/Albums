@@ -68,6 +68,7 @@ const App = () => {
     } else {
       setAlbums({ type: 'CREATE', albumInfo: currentAlbum })
       setNewAlbumId((state) => state + 1)
+      setCurrentPage(1)
     }
     clearUserInput()
   }
