@@ -127,6 +127,7 @@ const App = () => {
         <Pagination
           albumsPerPage={albumsPerPage}
           totalAlbums={albums.length}
+          currentPage={currentPage}
           setCurrentPage={pageChangeScrollToTop}
         />
       </StyledAppContainer>

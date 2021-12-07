@@ -1,35 +1,72 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const Pagination = ({ albumsPerPage, totalAlbums, setCurrentPage }) => {
+const Pagination = ({
+  albumsPerPage,
+  totalAlbums,
+  setCurrentPage,
+  currentPage,
+}) => {
   const pageNumbers = []
   for (let i = 1; i <= Math.ceil(totalAlbums / albumsPerPage); i++) {
     pageNumbers.push(i)
   }
+  const pageNumberChange = (type) => {
+    if (
+      type === 'increment' &&
+      currentPage < Math.ceil(totalAlbums / albumsPerPage)
+    ) {
+      setCurrentPage((state) => state + 1)
+    } else if (type === 'decrement' && currentPage > 1) {
+      setCurrentPage((state) => state - 1)
+    }
+    return
+  }
   return (
-    <StyledUl>
+    <StyledPaginationContainer>
+      <StyledPaginationButton onClick={() => pageNumberChange('decrement')}>
+        &#8249;
+      </StyledPaginationButton>
       {pageNumbers.map((pageNumber) => (
-        <li onClick={() => setCurrentPage(pageNumber)} key={pageNumber}>
+        <StyledPaginationButton
+          className={currentPage === pageNumber && 'active'}
+          onClick={() => setCurrentPage(pageNumber)}
+          key={pageNumber}
+        >
           {pageNumber}
-        </li>
+        </StyledPaginationButton>
       ))}
-    </StyledUl>
+      <StyledPaginationButton onClick={() => pageNumberChange('increment')}>
+        &#8250;
+      </StyledPaginationButton>
+    </StyledPaginationContainer>
   )
 }
 
 export default Pagination
 
-const StyledUl = styled.ul`
+const StyledPaginationContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 90%;
   padding: 2em 0;
   background-color: #fff;
-  li {
-    border: ${({ theme }) => theme.border.main};
-    width: 24px;
-    height: 24px;
-    text-align: center;
-    line-height: 22px;
+  border-top: ${({ theme }) => theme.border.main};
+  & .active {
+    background-color: #3f3f3f;
+    color: #fff;
+    box-shadow: none;
   }
+`
+const StyledPaginationButton = styled.button`
+  background-color: #fff;
+  border: ${({ theme }) => theme.border.main};
+  margin: 2px;
+  width: 24px;
+  height: 24px;
+  text-align: center;
+  line-height: 22px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 `

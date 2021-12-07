@@ -4,13 +4,6 @@ const GlobalStyles = createGlobalStyle`
   * {
     box-sizing: border-box;
   }
-  /* body {
-    min-height: 100vh;
-    min-height: -webkit-fill-available;
-  }
-  html {
-    height: -webkit-fill-available;
-  } */
   body, html, button, div, textarea, input {
     margin: 0;
     padding: 0;
@@ -20,6 +13,7 @@ const GlobalStyles = createGlobalStyle`
   }
   button {
     border: 0;
+    cursor: pointer;
   }
   input:focus, textarea:focus {
     outline: none;
