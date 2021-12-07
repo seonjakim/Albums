@@ -2,9 +2,13 @@ import React from 'react'
 import styled from 'styled-components'
 import ModalBackground from './ModalBackground'
 
-const DiscardMessageModal = ({ discardBtnClick, cancelBtnClick }) => {
+const DiscardMessageModal = ({
+  discardBtnClick,
+  cancelBtnClick,
+  modalOpen,
+}) => {
   return (
-    <ModalBackground>
+    <ModalBackground modalOpen={modalOpen}>
       <StyledDiscardMessage>
         <span>If you leave, your edits won't be saved.</span>
         <button onClick={discardBtnClick}>Discard</button>

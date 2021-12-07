@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 const ModalBackground = ({ modalBackgroundClick, children, modalOpen }) => {
-  // if (!modalOpen) return null
+  if (!modalOpen) return null
   return (
     <>
       <StyledModal onClick={modalBackgroundClick} />

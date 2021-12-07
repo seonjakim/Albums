@@ -8,9 +8,7 @@ const ImageCard = ({ title, imgUrl, verticalEllipsisClick, onImgClick }) => {
         <h3>{title}</h3>
         <button onClick={verticalEllipsisClick}>&#8942;</button>
       </div>
-      <div onClick={onImgClick}>
-        <img src={imgUrl} />
-      </div>
+      <img src={imgUrl} onClick={onImgClick} />
     </StyledLi>
   )
 }
@@ -20,6 +18,8 @@ export default ImageCard
 const StyledLi = styled.li`
   border: ${({ theme }) => theme.border.main};
   width: fit-content;
+  margin: 1em auto;
+  width: 450px;
   div {
     border-bottom: ${({ theme }) => theme.border.main};
     display: flex;
@@ -41,6 +41,6 @@ const StyledLi = styled.li`
     text-overflow: ellipsis;
   }
   img {
-    width: 450px;
+    width: 100%;
   }
 `

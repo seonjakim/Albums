@@ -2,7 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 import ModalBackground from './ModalBackground'
 
-const CreateAlbum = ({
+const PostModal = ({
+  modalOpen,
   currentAlbum,
   setCurrentAlbum,
   doneBtnClick,
@@ -21,7 +22,6 @@ const CreateAlbum = ({
     event.preventDefault()
     const reader = new FileReader()
     const file = event.target.files[0]
-    console.log(file)
     reader.onloadend = () => {
       setCurrentAlbum({
         ...currentAlbum,
@@ -32,7 +32,10 @@ const CreateAlbum = ({
   }
 
   return (
-    <ModalBackground modalBackgroundClick={cancelBtnClick}>
+    <ModalBackground
+      modalBackgroundClick={cancelBtnClick}
+      modalOpen={modalOpen}
+    >
       <StyledPostAlbumContainer>
         <input
           value={currentAlbum.title}
@@ -66,7 +69,7 @@ const CreateAlbum = ({
   )
 }
 
-export default CreateAlbum
+export default PostModal
 
 const StyledPostAlbumContainer = styled.div`
   padding: 2em;

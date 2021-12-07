@@ -2,10 +2,18 @@ import React from 'react'
 import styled from 'styled-components'
 import ModalBackground from './ModalBackground'
 
-const DeleteAlbum = ({ cancelBtnClick, deleteBtnClick, editBtnClick }) => {
+const EditBtnModal = ({
+  cancelBtnClick,
+  deleteBtnClick,
+  editBtnClick,
+  modalOpen,
+}) => {
   return (
     <>
-      <ModalBackground modalBackgroundClick={cancelBtnClick}>
+      <ModalBackground
+        modalBackgroundClick={cancelBtnClick}
+        modalOpen={modalOpen}
+      >
         <StyledButtonContainer>
           <button onClick={editBtnClick}>Edit</button>
           <button onClick={deleteBtnClick}>Delete</button>
@@ -16,7 +24,7 @@ const DeleteAlbum = ({ cancelBtnClick, deleteBtnClick, editBtnClick }) => {
   )
 }
 
-export default DeleteAlbum
+export default EditBtnModal
 
 const StyledButtonContainer = styled.div`
   width: 400px;

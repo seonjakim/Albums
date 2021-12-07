@@ -24,6 +24,7 @@ const StyledUl = styled.ul`
   justify-content: center;
   align-items: center;
   padding: 2em 0;
+  background-color: #fff;
   li {
     border: ${({ theme }) => theme.border.main};
     width: 24px;

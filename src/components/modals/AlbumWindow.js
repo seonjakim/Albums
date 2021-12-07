@@ -2,9 +2,12 @@ import React from 'react'
 import styled from 'styled-components'
 import ModalBackground from './ModalBackground'
 
-const AlbumWindow = ({ modalBackgroundClick, currentAlbum }) => {
+const AlbumWindow = ({ modalBackgroundClick, currentAlbum, modalOpen }) => {
   return (
-    <ModalBackground modalBackgroundClick={modalBackgroundClick}>
+    <ModalBackground
+      modalBackgroundClick={modalBackgroundClick}
+      modalOpen={modalOpen}
+    >
       <StyledAlbumWindow>
         <h2>{currentAlbum?.title}</h2>
         <img src={currentAlbum?.img} alt="album-photo" />
@@ -25,5 +28,6 @@ const StyledAlbumWindow = styled.div`
   }
   img {
     width: 100%;
+    max-height: 70vh;
   }
 `
