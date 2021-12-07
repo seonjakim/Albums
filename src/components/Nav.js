@@ -4,18 +4,12 @@ import styled from 'styled-components'
 const Nav = ({ createBtnClick }) => {
   return (
     <StyledNavContainer>
-      <div>
-        <svg
-          aria-label="Home"
-          color="#262626"
-          fill="#262626"
-          height="32"
-          role="img"
-          viewBox="0 0 48 48"
-          width="32"
-        >
-          <path d="M45.5 48H30.1c-.8 0-1.5-.7-1.5-1.5V34.2c0-2.6-2.1-4.6-4.6-4.6s-4.6 2.1-4.6 4.6v12.3c0 .8-.7 1.5-1.5 1.5H2.5c-.8 0-1.5-.7-1.5-1.5V23c0-.4.2-.8.4-1.1L22.9.4c.6-.6 1.6-.6 2.1 0l21.5 21.5c.3.3.4.7.4 1.1v23.5c.1.8-.6 1.5-1.4 1.5z"></path>
-        </svg>
+      <img
+        className="logo"
+        src="https://images.velog.io/images/seonja/post/94ad1299-3a0d-4b02-9b15-839dd2477fff/image.png"
+        alt=""
+      />
+      <StyledIconContainer>
         <button onClick={createBtnClick}>
           <svg
             aria-label="New Post"
@@ -35,7 +29,7 @@ const Nav = ({ createBtnClick }) => {
           src="https://images.velog.io/images/seonja/post/01fd7f0f-2969-4dce-8c13-abe9d004ab52/image.png"
           alt="user-icon"
         />
-      </div>
+      </StyledIconContainer>
     </StyledNavContainer>
   )
 }
@@ -43,26 +37,32 @@ const Nav = ({ createBtnClick }) => {
 export default Nav
 
 const StyledNavContainer = styled.nav`
-  position: fixed;
   width: 100%;
   border-bottom: ${({ theme }) => theme.border.main};
   background-color: #fff;
+  padding: 0 4em;
+  display: flex;
+  align-items: center;
   height: 68px;
+  & .logo {
+    height: 90%;
+  }
+`
+const StyledIconContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: fit-content;
+  height: 100%;
+  margin-left: auto;
   img {
     width: 32px;
     height: 32px;
   }
-  div {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 30vw;
-    min-width: 330px;
-    height: 100%;
-    margin-left: auto;
-    padding: 0 4rem;
-  }
   button {
     background-color: transparent;
+    margin-right: 16px;
+    display: flex;
+    align-items: center;
   }
 `

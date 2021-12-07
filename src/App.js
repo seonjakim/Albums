@@ -108,9 +108,9 @@ const App = () => {
   }, [])
   return (
     <>
-      <Nav createBtnClick={() => setModalOpen('post')} />
       <StyledAppContainer>
-        <div ref={scrollRef} style={{ overflowY: 'scroll' }}>
+        <Nav createBtnClick={() => setModalOpen('post')} />
+        <div ref={scrollRef} className="img-card-container">
           {currentAlbums.map((album, index) => {
             const { id, title, img } = album
             return (
@@ -164,5 +164,7 @@ const StyledAppContainer = styled.div`
   display: grid;
   grid-template-rows: 1fr auto;
   height: 100vh;
-  padding-top: 68px;
+  & .img-card-container {
+    overflow-y: scroll;
+  }
 `
