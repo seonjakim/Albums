@@ -1,14 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const ImageCard = ({ title, imgUrl, verticalEllipsisClick, onImgClick }) => {
+const ImageCard = ({ title, imgUrl, verticalEllipsisClick, imgClick }) => {
   return (
     <StyledLi>
       <div>
         <h3>{title}</h3>
         <button onClick={verticalEllipsisClick}>&#8942;</button>
       </div>
-      <img src={imgUrl} onClick={onImgClick} />
+      <img src={imgUrl} onClick={imgClick} />
     </StyledLi>
   )
 }

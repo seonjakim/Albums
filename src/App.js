@@ -31,16 +31,20 @@ const App = () => {
   const [selectedAlbumId, setSelectedAlbumId] = React.useState(null)
   const [currentAlbum, setCurrentAlbum] = React.useState(albumInfo)
 
+  const albumIdOnEditStage = (id) => {
+    setModalOpen('edit')
+    setSelectedAlbumId(id)
+  }
   const resetEditStatus = () => {
     setModalOpen(false)
     setSelectedAlbumId(null)
   }
-  const discardBtnClick = () => {
+  const clearUserInput = () => {
     setDiscardModalOpen(false)
     resetEditStatus()
     setCurrentAlbum(albumInfo)
   }
-  const editBtnClick = () => {
+  const selectedAlbumOnEditStage = () => {
     setCurrentAlbum(
       albums[crudAction.indexOfSelectedAlbum(albums, selectedAlbumId)]
     )
@@ -48,13 +52,38 @@ const App = () => {
     setModalOpen('post')
   }
 
-  const verticalEllipsisClick = (id) => {
-    setModalOpen('edit')
-    setSelectedAlbumId(id)
+  const stopPostAndReset = () => {
+    if (currentAlbum.title.length || currentAlbum.img.length)
+      setDiscardModalOpen(true)
+    else clearUserInput()
   }
-  const deleteBtnClick = () => {
+  const postAlbum = () => {
+    let index = crudAction.indexOfSelectedAlbum(albums, currentAlbum.id)
+    if (index !== -1) {
+      setAlbums({
+        type: 'UPDATE',
+        albumInfo: currentAlbum,
+        index,
+      })
+    } else {
+      setAlbums({ type: 'CREATE', albumInfo: currentAlbum })
+      setNewAlbumId((state) => state + 1)
+    }
+    clearUserInput()
+  }
+
+  const deleteAlbum = () => {
     setAlbums({ type: 'DELETE', index: selectedAlbumId })
     resetEditStatus()
+  }
+
+  const albumOpen = (id) => {
+    setModalOpen('read')
+    setCurrentAlbum(albums[crudAction.indexOfSelectedAlbum(albums, id)])
+  }
+  const albumClose = () => {
+    setModalOpen(false)
+    setCurrentAlbum(albumInfo)
   }
 
   const pageChangeScrollToTop = (pageNumber) => {
@@ -65,36 +94,8 @@ const App = () => {
     })
   }
 
-  const cancelBtnClick = () => {
-    if (currentAlbum.title.length || currentAlbum.img.length)
-      setDiscardModalOpen(true)
-    else discardBtnClick()
-  }
-  /** done button on Create or Edit an album */
-  const doneBtnClick = () => {
-    let index = crudAction.indexOfSelectedAlbum(albums, currentAlbum.id)
-    if (index !== -1) {
-      setAlbums({
-        type: 'UPDATE',
-        albumInfo: currentAlbum,
-        index,
-      })
-    } else setAlbums({ type: 'CREATE', albumInfo: currentAlbum })
-    setNewAlbumId((state) => state + 1)
-    discardBtnClick()
-  }
-
-  const onAlbumCardClick = (id) => {
-    setModalOpen('read')
-    setCurrentAlbum(albums[crudAction.indexOfSelectedAlbum(albums, id)])
-  }
-  const onAlbumCardClose = () => {
-    setModalOpen(false)
-    setCurrentAlbum(albumInfo)
-  }
-
   React.useEffect(() => {
-    const apiCall = async () => {
+    const fetchData = async () => {
       const res = await fetch('https://jsonplaceholder.typicode.com/albums')
       const data = await res.json()
       setAlbums(
@@ -104,7 +105,7 @@ const App = () => {
       )
       setNewAlbumId(data.length + 1)
     }
-    apiCall()
+    fetchData()
   }, [])
   return (
     <>
@@ -116,8 +117,8 @@ const App = () => {
             return (
               <ImageCard
                 key={index}
-                verticalEllipsisClick={() => verticalEllipsisClick(id)}
-                onImgClick={() => onAlbumCardClick(id)}
+                verticalEllipsisClick={() => albumIdOnEditStage(id)}
+                imgClick={() => albumOpen(id)}
                 title={title}
                 imgUrl={img}
               />
@@ -133,25 +134,25 @@ const App = () => {
       </StyledAppContainer>
       <AlbumWindowModal
         modalOpen={modalOpen === 'read'}
-        modalBackgroundClick={onAlbumCardClose}
+        modalBackgroundClick={albumClose}
         currentAlbum={currentAlbum}
       />
       <EditButtonModal
         modalOpen={modalOpen === 'edit'}
-        deleteBtnClick={deleteBtnClick}
+        deleteBtnClick={deleteAlbum}
         cancelBtnClick={resetEditStatus}
-        editBtnClick={editBtnClick}
+        editBtnClick={selectedAlbumOnEditStage}
       />
       <PostAlbumModal
         modalOpen={modalOpen === 'post'}
         currentAlbum={currentAlbum}
         setCurrentAlbum={setCurrentAlbum}
-        doneBtnClick={doneBtnClick}
-        cancelBtnClick={cancelBtnClick}
+        doneBtnClick={postAlbum}
+        cancelBtnClick={stopPostAndReset}
       />
       <DiscardMessageModal
         modalOpen={discardModalOpen}
-        discardBtnClick={discardBtnClick}
+        discardBtnClick={clearUserInput}
         cancelBtnClick={() => setDiscardModalOpen(false)}
       />
     </>
@@ -162,7 +163,7 @@ export default App
 
 const StyledAppContainer = styled.div`
   display: grid;
-  grid-template-rows: 1fr auto;
+  grid-template-rows: auto 1fr auto;
   height: 100vh;
   & .img-card-container {
     overflow-y: scroll;
