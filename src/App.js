@@ -1,35 +1,35 @@
-import React from 'react'
+import React, { useReducer, useRef, useState, useEffect } from 'react'
 import styled from 'styled-components'
-import ImageCard from './components/ImageCard'
+import AlbumCard from './components/AlbumCard'
 import Nav from './components/Nav'
 import Pagination from './components/Pagination'
 import PostAlbumModal from './components/modals/PostModal'
-import EditButtonModal from './components/modals/EditBtnModal'
+import EditButtonModal from './components/modals/EditButtonModal'
 import DiscardMessageModal from './components/modals/DiscardMessageModal'
-import AlbumWindowModal from './components/modals/AlbumWindow'
+import AlbumModal from './components/modals/AlbumModal'
 import * as crudAction from './components/Library'
 
 const App = () => {
-  const scrollRef = React.useRef()
-  const [albums, setAlbums] = React.useReducer(crudAction.reducer, [])
+  const scrollRef = useRef()
+  const [albums, setAlbums] = useReducer(crudAction.reducer, [])
   /** Modal open status */
-  const [modalOpen, setModalOpen] = React.useState(false)
-  const [discardModalOpen, setDiscardModalOpen] = React.useState(false)
+  const [modalOpen, setModalOpen] = useState(false)
+  const [discardModalOpen, setDiscardModalOpen] = useState(false)
   /** pagination */
-  const [currentPage, setCurrentPage] = React.useState(1)
+  const [currentPage, setCurrentPage] = useState(1)
   const albumsPerPage = 5
   const lastAlbumIndex = currentPage * albumsPerPage
   const firstAlbumIndex = lastAlbumIndex - albumsPerPage
   const currentAlbums = albums.slice(firstAlbumIndex, lastAlbumIndex)
   /** currently selected album info for Edit, Delete, and Read */
-  const [newAlbumId, setNewAlbumId] = React.useState(0)
+  const [newAlbumId, setNewAlbumId] = useState(0)
   const albumInfo = {
     id: newAlbumId,
     title: '',
     img: '',
   }
-  const [selectedAlbumId, setSelectedAlbumId] = React.useState(null)
-  const [currentAlbum, setCurrentAlbum] = React.useState(albumInfo)
+  const [selectedAlbumId, setSelectedAlbumId] = useState(null)
+  const [currentAlbum, setCurrentAlbum] = useState(albumInfo)
 
   const albumIdOnEditStage = (id) => {
     setModalOpen('edit')
@@ -94,7 +94,7 @@ const App = () => {
     })
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchData = async () => {
       const res = await fetch('https://jsonplaceholder.typicode.com/albums')
       const data = await res.json()
@@ -115,7 +115,7 @@ const App = () => {
           {currentAlbums.map((album, index) => {
             const { id, title, img } = album
             return (
-              <ImageCard
+              <AlbumCard
                 key={index}
                 verticalEllipsisClick={() => albumIdOnEditStage(id)}
                 imgClick={() => albumOpen(id)}
@@ -132,7 +132,7 @@ const App = () => {
           setCurrentPage={pageChangeScrollToTop}
         />
       </StyledAppContainer>
-      <AlbumWindowModal
+      <AlbumModal
         modalOpen={modalOpen === 'read'}
         modalBackgroundClick={albumClose}
         currentAlbum={currentAlbum}

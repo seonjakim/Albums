@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import ModalBackground from './ModalBackground'
 
-const AlbumWindow = ({ modalBackgroundClick, currentAlbum, modalOpen }) => {
+const AlbumModal = ({ modalBackgroundClick, currentAlbum, modalOpen }) => {
   return (
     <ModalBackground
       modalBackgroundClick={modalBackgroundClick}
@@ -16,7 +16,7 @@ const AlbumWindow = ({ modalBackgroundClick, currentAlbum, modalOpen }) => {
   )
 }
 
-export default AlbumWindow
+export default AlbumModal
 
 const StyledAlbumWindow = styled.div`
   max-width: 40vw;

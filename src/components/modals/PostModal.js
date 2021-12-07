@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import ModalBackground from './ModalBackground'
 
@@ -9,11 +9,11 @@ const PostModal = ({
   doneBtnClick,
   cancelBtnClick,
 }) => {
-  const [hasEmptyVal, setHasEmptyVal] = React.useState(true)
+  const [hasEmptyVal, setHasEmptyVal] = useState(true)
   const checkEmptyVal = (obj) =>
     Object.values(obj).some((value) => value.length === 0)
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!checkEmptyVal(currentAlbum)) setHasEmptyVal(false)
     else setHasEmptyVal(true)
   }, [currentAlbum])

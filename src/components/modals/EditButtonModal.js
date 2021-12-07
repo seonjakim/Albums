@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import ModalBackground from './ModalBackground'
 
-const EditBtnModal = ({
+const EditButtonModal = ({
   cancelBtnClick,
   deleteBtnClick,
   editBtnClick,
@@ -24,7 +24,7 @@ const EditBtnModal = ({
   )
 }
 
-export default EditBtnModal
+export default EditButtonModal
 
 const StyledButtonContainer = styled.div`
   width: 400px;

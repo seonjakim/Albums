@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 
 const Pagination = ({
@@ -11,6 +11,12 @@ const Pagination = ({
   for (let i = 1; i <= Math.ceil(totalAlbums / albumsPerPage); i++) {
     pageNumbers.push(i)
   }
+
+  useEffect(() => {
+    if (currentPage > pageNumbers[pageNumbers.length - 1])
+      setCurrentPage(pageNumbers[pageNumbers.length - 1])
+  }, [pageNumbers])
+
   const pageNumberChange = (type) => {
     if (
       type === 'increment' &&

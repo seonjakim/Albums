@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const ImageCard = ({ title, imgUrl, verticalEllipsisClick, imgClick }) => {
+const AlbumCard = ({ title, imgUrl, verticalEllipsisClick, imgClick }) => {
   return (
     <StyledLi>
       <div>
@@ -13,13 +13,14 @@ const ImageCard = ({ title, imgUrl, verticalEllipsisClick, imgClick }) => {
   )
 }
 
-export default ImageCard
+export default AlbumCard
 
 const StyledLi = styled.li`
   border: ${({ theme }) => theme.border.main};
-  width: fit-content;
   margin: 1em auto;
-  width: 450px;
+  width: 452px;
+  display: grid;
+  grid-template-rows: auto 1fr;
   div {
     border-bottom: ${({ theme }) => theme.border.main};
     display: flex;
